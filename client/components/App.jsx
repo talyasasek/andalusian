@@ -62,9 +62,11 @@ class App extends React.Component {
     let updateObj = {};
     updateObj[property] = value;
     this.setState(updateObj);
+    console.log(this.awsAccessKey)
   }
 
   getawsAccountID() {
+    
     axios
       .get("/aws/getawsAccountID", {
         headers: { 'Content-Type': 'application/json' }
@@ -85,8 +87,8 @@ class App extends React.Component {
         };
         response.data.userData.keys.forEach(updateKey => {
           updateStateObject[updateKey.keyType] = updateKey.key;
-          if (updateKey === 'awsSecretAccessKey') {
-            updateStateObject.awsAccessKey = key.awsAccessKey;
+          if (updateKey.keyType === 'awsSecretAccessKey') {
+            updateStateObject.awsAccessKey = updateKey.awsAccessKey;
           }
         });
 
@@ -340,12 +342,12 @@ class App extends React.Component {
           <label>
             <input onChange={() => this.updateInfo('pageSelect', 'Lambda')} type="radio"
               value="Lambda" checked={this.state.pageSelect === 'Lambda'} />
-            <img src="https://git.teknik.io/POTM/Mirror-script.module.lambdascrapers/raw/commit/25b20d0adb8afa6d29eba3a0167046cb2e21ea94/icon.png" />
+            <img id="lambdaLogo" src="https://git.teknik.io/POTM/Mirror-script.module.lambdascrapers/raw/commit/25b20d0adb8afa6d29eba3a0167046cb2e21ea94/icon.png" />
           </label>
           <label>
             <input onChange={() => this.updateInfo('pageSelect', 'Docker')} type="radio"
               value="Docker" checked={this.state.pageSelect === 'Docker'} />
-            <img src="https://cdn.iconscout.com/icon/free/png-256/docker-7-569438.png" />
+            <img id="dockerLogo" src="https://cdn.iconscout.com/icon/free/png-256/docker-7-569438.png" />
           </label>
         </div>
         {displayed}

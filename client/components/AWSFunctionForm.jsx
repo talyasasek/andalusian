@@ -7,6 +7,7 @@ const AWSFunctionForm = props => {
   function configureAWS() {
     let awsAccessKey = document.getElementById("awsAccessKey");
     awsAccessKey.value = "";
+    console.log(awsAccessKey.value)
     let awsSecretAccessKey = document.getElementById("awsSecretAccessKey");
     awsSecretAccessKey.value = "";
     let awsRegion = document.getElementById("awsRegion");
@@ -24,8 +25,7 @@ const AWSFunctionForm = props => {
         .catch((error) => {
           console.log(error);
         });
-      alert("Account configured.")
-      props.listFunctions();
+      // props.listFunctions();
     } else {
       alert("Please fill out all 3 fields to configure")
     }

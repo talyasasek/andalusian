@@ -9,7 +9,7 @@ const dbController = {};
 
 dbController.hashPassword = (req, res, next) => {
   const { username, password } = req.body;
-  bcrypt.hash(password, 10, function(err, hash) {
+  bcrypt.hash(password, 10, function (err, hash) {
     if (err) {
       console.log(`Error in dbController.bcryptify: ${err}`);
       return next(err);
@@ -83,14 +83,14 @@ dbController.decrypt = (req, res, next) => {
       key: decrypted,
     }
 
-    if (decryptedKeyObject.keyType === 'awsKey') {
-      awsAccessKey: key.awsAccessKey;
+    if (decryptedKeyObject.keyType === 'awsSecretAccessKey') {
+      decryptedKeyObject.awsAccessKey = key.awsAccessKey;
     }
 
     decryptedKeys.push(decryptedKeyObject);
   });
 
-  res.locals.userData.keys = decryptedKeys; 
+  res.locals.userData.keys = decryptedKeys;
   // console.log(res.locals.userData.decryptedKeys);
 
   return next();

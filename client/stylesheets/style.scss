@@ -131,13 +131,28 @@ button {
 }
 
 [type=radio]:checked + img {
-  outline: 3px solid #70234d
+  outline: 2px solid #999897
 }
 
 img {
-  margin-right: 10px;
+  margin-right: 25px;
   margin-bottom: 10px;
   margin-top: 10px;
   height: 25px;
   width: 25px;
+  padding: 3px;
 }
+
+// #dockerLogo {
+//   height: 40px;
+//   width: 40px;
+//   margin-top: 3px;
+
+// }
+
+// #lambdaLogo {
+//   height: 30px;
+//   width: 30px;
+//   margin-top: 8px;
+
+// }

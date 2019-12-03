@@ -11,7 +11,9 @@ const admZip = require('adm-zip');
 const awsController = {};
 
 awsController.configureAWS = (req, res, next) => {
+  console.log("in configureAWS")
   fs.unlinkSync('./credentials.json');
+  console.log("req.body --->", req.body)
   let data = `{ "accessKeyId": ${JSON.stringify(req.body.awsAccessKey)}, "secretAccessKey": ${JSON.stringify(req.body.awsSecretAccessKey)} , "region": ${JSON.stringify(req.body.awsRegion)}  }`;
   fs.writeFile('credentials.json', data, (err) => {
     if (err) throw err
@@ -37,8 +39,9 @@ awsController.createFunction = (req, res, next) => {
       "Role": "arn:aws:iam::" + `${req.body.awsAccountID}` + `${req.body.awsRole}`,
       "Runtime": `${req.body.awsRuntime}`
     };
-    console.log(params);
+    console.log("params ------->", params);
     lambda.createFunction(params, (err, data) => {
+      console.log("in lambda!")
       if (err) console.log(err, err.stack);
       else {
         console.log("WHATTTT -->", data);
@@ -117,21 +120,23 @@ awsController.loadCode = (req, res, next) => {
   lambda.getFunction(params, (err, data) => {
     console.log("data.Code.Location ---->", data.Code.Location)
     const href = data.Code.Location;
-    const zipFile = 'aster.zip';
-    const extractEntryTo = `${zipFile}-master/`;
-    const outputDir = `./${zipFile}-master/`;
+    const zipFile = 'master.zip';
     request
       .get(href)
+      .header('Content-Type', 'application/json')
       .on('error', function (error) {
         console.log(error);
       })
       .pipe(fs.createWriteStream(zipFile))
-      // .then(data => console.log("DATATDATAT", data))
       .on('finish', function () {
-
-        const zip = new admZip(zipFile);
-        zip.extractEntryTo(extractEntryTo, outputDir, false, true);
-
+        const readStream = fs.createReadStream(zipFile);
+        // const writeStream = fstream.Writer('./testing');
+        readStream
+          .on("open", () => {
+            readStream.pipe(res)
+          })
+        //   .pipe(unzip.Parse())
+        //   .pipe(writeStream)
       });
     if (err) {
       console.log("err: ", err)
